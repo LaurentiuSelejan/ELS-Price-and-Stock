@@ -153,58 +153,58 @@ def move_royal_export_file():
 
 rc_file = move_royal_export_file()
 
-# # file part!!!!!!!
-# pd.set_option('display.max_columns', None)
-# pd.set_option("display.max_rows", None)
-#
-# els_df = pd.read_csv(f'{els_file}', usecols=['Tip', 'SKU', 'În stoc?', 'Stoc', 'Preț obișnuit'])
-# # els_df = els_df[els_df['Tip'].str.contains('variable|variation') == False]
-#
-#
-# rc_df = pd.read_csv(f'{rc_file}', usecols=['Cod', 'Pret', 'Stoc'])
-#
-# f = open('./testout.txt', 'w')
-# n = open('./Not Found.txt', 'w')
-#
-# # GOOD CODE, DO NOT DELETE THIS PORTION!!!!!!
-# for i in range(len(els_df["SKU"]) - 1):
-#     if els_df['Tip'][i] == 'variable':
-#         continue
-#     elif els_df['Tip'][i] == 'variation':
-#         continue
-#     elif els_df['Stoc'][i] > 0:
-#         continue
-#     else:
-#         for j in range(len(rc_df['Cod']) - 1):
-#             if els_df['SKU'][i] == rc_df["Cod"][j]:
-#                 f.write(f'{els_df["SKU"][i]} Found ' + str(j) + '\n')
-#                 if rc_df['Stoc'][j] == '>50' or int(rc_df["Stoc"][j]) > 0:
-#                     els_df.loc[i, 'În stoc?'] = 1
-#                     if 0 < rc_df['Pret'][j] <= 500:
-#                         els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.15, 2)
-#                     elif rc_df['Pret'][j] <= 1000:
-#                         els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.125, 2)
-#                     elif rc_df['Pret'][j] <= 1500:
-#                         els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.1, 2)
-#                     elif rc_df['Pret'][j] <= 2000:
-#                         els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.075, 2)
-#                     elif rc_df['Pret'][j] <= 2500:
-#                         els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.05, 2)
-#                     elif rc_df['Pret'][j] <= 3000:
-#                         els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.025, 2)
-#                     elif rc_df['Pret'][j] <= 5000:
-#                         els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.02, 2)
-#                     else:
-#                         els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.015, 2)
-#                 else:
-#                     els_df.loc[i, 'În stoc?'] = 0
-#
-# els_df.to_csv('./els_out.csv')
-#
-# f.close()
-#
-# for i in range(len(els_df["SKU"])):
-#     if els_df['SKU'][i] not in rc_df['Cod'].values:
-#         n.write(f'{els_df["SKU"][i]}' + '\n')
-#
-# n.close()
+# file part!!!!!!!
+pd.set_option('display.max_columns', None)
+pd.set_option("display.max_rows", None)
+
+els_df = pd.read_csv(f'{els_file}', usecols=['Tip', 'SKU', 'În stoc?', 'Stoc', 'Preț obișnuit'])
+# els_df = els_df[els_df['Tip'].str.contains('variable|variation') == False]
+
+
+rc_df = pd.read_csv(f'{rc_file}', usecols=['Cod', 'Pret', 'Stoc'])
+
+f = open('./Logs/found.txt', 'w')
+n = open('./Logs/not-found.txt', 'w')
+
+# GOOD CODE, DO NOT DELETE THIS PORTION!!!!!!
+for i in range(len(els_df["SKU"]) - 1):
+    if els_df['Tip'][i] == 'variable':
+        continue
+    elif els_df['Tip'][i] == 'variation':
+        continue
+    elif els_df['Stoc'][i] > 0:
+        continue
+    else:
+        for j in range(len(rc_df['Cod']) - 1):
+            if els_df['SKU'][i] == rc_df["Cod"][j]:
+                f.write(f'{els_df["SKU"][i]} Found ' + str(j) + '\n')
+                if rc_df['Stoc'][j] == '>50' or int(rc_df["Stoc"][j]) > 0:
+                    els_df.loc[i, 'În stoc?'] = 1
+                    if 0 < rc_df['Pret'][j] <= 500:
+                        els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.15, 2)
+                    elif rc_df['Pret'][j] <= 1000:
+                        els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.125, 2)
+                    elif rc_df['Pret'][j] <= 1500:
+                        els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.1, 2)
+                    elif rc_df['Pret'][j] <= 2000:
+                        els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.075, 2)
+                    elif rc_df['Pret'][j] <= 2500:
+                        els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.05, 2)
+                    elif rc_df['Pret'][j] <= 3000:
+                        els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.025, 2)
+                    elif rc_df['Pret'][j] <= 5000:
+                        els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.02, 2)
+                    else:
+                        els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.015, 2)
+                else:
+                    els_df.loc[i, 'În stoc?'] = 0
+
+els_df.to_csv('./Import Files/els_out.csv')
+
+f.close()
+
+for i in range(len(els_df["SKU"])):
+    if els_df['SKU'][i] not in rc_df['Cod'].values:
+        n.write(f'{els_df["SKU"][i]}' + '\n')
+
+n.close()
