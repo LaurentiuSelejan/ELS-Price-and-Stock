@@ -199,7 +199,14 @@ for i in range(len(els_df["SKU"]) - 1):
                 else:
                     els_df.loc[i, 'În stoc?'] = 0
 
-els_df.to_csv('./Import Files/els_out.csv')
+# replace . with , to prevent import error into WP
+for i in range(len(els_df["Preț obișnuit"]) - 1):
+    cod_produs = str(els_df["Preț obișnuit"][i])
+    if '.' in cod_produs:
+        els_df.loc[i, 'Preț obișnuit'] = cod_produs.replace('.', ',')
+    else:
+        pass
+
 
 f.close()
 
@@ -207,4 +214,6 @@ for i in range(len(els_df["SKU"])):
     if els_df['SKU'][i] not in rc_df['Cod'].values:
         n.write(f'{els_df["SKU"][i]}' + '\n')
 
+
+els_df.to_csv('./Import Files/els_out.csv')
 n.close()
