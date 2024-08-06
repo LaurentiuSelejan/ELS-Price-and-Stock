@@ -3,6 +3,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.firefox.options import Options
+from webdriver_manager.firefox import GeckoDriverManager
+from selenium.webdriver.firefox.service import Service as FirefoxService
 import pandas as pd
 import time
 import glob
@@ -17,16 +19,16 @@ def delete_old_els_files():
     isExisting = os.path.exists("./Export Files/ELS")
     if isExisting:
         files = glob.glob('./Export Files/ELS/*')
-        for f in files:
-            os.remove(f)
+        for file in files:
+            os.remove(file)
 
 
 def delete_old_rc_files():
     isExisting = os.path.exists('./Export Files/Royal')
     if isExisting:
         files = glob.glob('./Export Files/Royal/*')
-        for f in files:
-            os.remove(f)
+        for file in files:
+            os.remove(file)
 
 
 delete_old_els_files()
@@ -34,14 +36,15 @@ delete_old_rc_files()
 
 print('deleted old files')
 
-
 options = Options()
 options.add_argument('--headless')
-firefox_driver_path = '/snap/bin/geckodriver'
-driver_service = webdriver.FirefoxService(executable_path=firefox_driver_path)
-els_driver = webdriver.Firefox(options=options, service=driver_service)
+# firefox_driver_path = '/usr/local/bin/geckodriver'
+# driver_service = webdriver.FirefoxService(executable_path=firefox_driver_path)
+# els_driver = webdriver.Firefox(options=options, service=driver_service)
+els_driver = webdriver.Firefox(options=options)
 
-# download els csv file
+
+# DOWNLOAD ELS CSV FILE
 def download_els_export_file(driver):
     driver.get("https://electronicshop.ro/wp-admin")
     email_element = driver.find_element(By.ID, "user_login")
@@ -72,11 +75,11 @@ def download_els_export_file(driver):
 download_els_export_file(driver=els_driver)
 
 
-# move els export file to Documents, and return it for later use with pandas
+# MOVE ELS EXPORT FILE TO PROJECT FOLDER, AND RETURN ITS LOCATION FOR LATER USE WITH PANDAS
 
 
 def move_els_export_file():
-    list_of_files = glob.glob('/home/laurentiu/Downloads/*')
+    list_of_files = glob.glob('/home/manushamanu/Downloads/*')
     latest_file = max(list_of_files, key=os.path.getctime)
     shutil.move(latest_file, './Export Files/ELS')
 
@@ -87,8 +90,8 @@ def move_els_export_file():
 
 els_file = move_els_export_file()
 
-# download royal csv file
-rc_driver = webdriver.Firefox(options=options, service=driver_service)
+# DOWNLOAD ROYAL CSV FILE
+rc_driver = webdriver.Firefox(options=options)
 
 
 def download_rc_export_file(driver):
@@ -138,11 +141,11 @@ def download_rc_export_file(driver):
 download_rc_export_file(rc_driver)
 
 
-# move royal export file to Documents, and return it for later use with pandas
+# MOVE ROYAL EXPORT FILE TO PROJECT FOLDER, AND RETURN ITS LOCATION FOR LATER USE WITH PANDAS
 
 
 def move_royal_export_file():
-    list_of_files = glob.glob('/home/laurentiu/Downloads/*')
+    list_of_files = glob.glob('/home/manushamanu/Downloads/*')
     latest_file = max(list_of_files, key=os.path.getctime)
     shutil.move(latest_file, './Export Files/Royal')
 
@@ -153,15 +156,13 @@ def move_royal_export_file():
 
 rc_file = move_royal_export_file()
 
-# file part!!!!!!!
+# SKU CHECKING SECTION!!!!!!!
 pd.set_option('display.max_columns', None)
 pd.set_option("display.max_rows", None)
 
-els_df = pd.read_csv(f'{els_file}', usecols=['Tip', 'SKU', 'În stoc?', 'Stoc', 'Preț obișnuit'])
-# els_df = els_df[els_df['Tip'].str.contains('variable|variation') == False]
+els_df = pd.read_csv(f'{els_file}')
 
-
-rc_df = pd.read_csv(f'{rc_file}', usecols=['Cod', 'Pret', 'Stoc'])
+rc_df = pd.read_csv(f'{rc_file}')
 
 f = open('./Logs/found.txt', 'w')
 n = open('./Logs/not-found.txt', 'w')
@@ -199,7 +200,7 @@ for i in range(len(els_df["SKU"]) - 1):
                 else:
                     els_df.loc[i, 'În stoc?'] = 0
 
-# replace . with , to prevent import error into WP
+# REPLACE . WITH , TO PREVENT IMPORT ERROR INTO WP
 for i in range(len(els_df["Preț obișnuit"]) - 1):
     cod_produs = str(els_df["Preț obișnuit"][i])
     if '.' in cod_produs:
@@ -207,13 +208,11 @@ for i in range(len(els_df["Preț obișnuit"]) - 1):
     else:
         pass
 
-
 f.close()
 
 for i in range(len(els_df["SKU"])):
     if els_df['SKU'][i] not in rc_df['Cod'].values:
         n.write(f'{els_df["SKU"][i]}' + '\n')
 
-
-els_df.to_csv('./Import Files/els_out.csv')
+els_df.to_csv('./Import Files/els_out.csv', index=False)
 n.close()
