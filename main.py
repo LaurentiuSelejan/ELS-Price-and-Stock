@@ -181,7 +181,11 @@ for i in range(len(els_df["SKU"]) - 1):
                 f.write(f'{els_df["SKU"][i]} Found ' + str(j) + '\n')
                 if rc_df['Stoc'][j] == '>50' or int(rc_df["Stoc"][j]) > 0:
                     els_df.loc[i, 'În stoc?'] = 1
-                    if 0 < rc_df['Pret'][j] <= 500:
+                    if 0 < rc_df['Pret'][j] <= 50:
+                        els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.5, 2)
+                    elif rc_df['Pret'][j] <= 100:
+                        els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.2, 2)
+                    elif rc_df['Pret'][j] <= 500:
                         els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.15, 2)
                     elif rc_df['Pret'][j] <= 1000:
                         els_df.loc[i, 'Preț obișnuit'] = round(rc_df['Pret'][j] * 1.125, 2)
