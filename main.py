@@ -13,19 +13,17 @@ import shutil
 
 
 # check if there are files in the project files, if True delete them
-
-
 def delete_old_els_files():
-    isExisting = os.path.exists("./Export Files/ELS")
-    if isExisting:
+    is_existing = os.path.exists("./Export Files/ELS")
+    if is_existing:
         files = glob.glob('./Export Files/ELS/*')
         for file in files:
             os.remove(file)
 
 
 def delete_old_rc_files():
-    isExisting = os.path.exists('./Export Files/Royal')
-    if isExisting:
+    is_existing = os.path.exists('./Export Files/Royal')
+    if is_existing:
         files = glob.glob('./Export Files/Royal/*')
         for file in files:
             os.remove(file)
@@ -54,6 +52,7 @@ def download_els_export_file(driver):
     email_element.send_keys("electronicshoparad@gmail.com")
     pass_element.send_keys("6k2num2H!")
     auth_btn_element.click()
+    driver.implicitly_wait(5)
 
     produsebtn_element = driver.find_element(By.XPATH, "/html/body/div[1]/div[1]/div[2]/ul/li[12]/a/div[3]")
     produsebtn_element.click()
@@ -76,8 +75,6 @@ download_els_export_file(driver=els_driver)
 
 
 # MOVE ELS EXPORT FILE TO PROJECT FOLDER, AND RETURN ITS LOCATION FOR LATER USE WITH PANDAS
-
-
 def move_els_export_file():
     list_of_files = glob.glob('/home/manushamanu/Downloads/*')
     latest_file = max(list_of_files, key=os.path.getctime)
@@ -142,8 +139,6 @@ download_rc_export_file(rc_driver)
 
 
 # MOVE ROYAL EXPORT FILE TO PROJECT FOLDER, AND RETURN ITS LOCATION FOR LATER USE WITH PANDAS
-
-
 def move_royal_export_file():
     list_of_files = glob.glob('/home/manushamanu/Downloads/*')
     latest_file = max(list_of_files, key=os.path.getctime)
