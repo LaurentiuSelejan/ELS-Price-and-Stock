@@ -12,3 +12,5 @@ When doing pull request on a different system don't forget to check the file loc
 Added two more price conditions, one if the rc price is smaller than 50 and another if the price is greater than 50 but smaller than 100.
 
 First few tests of the import file on the local website went well. Consult with M if we should import the file on live website.
+
+Added .env file for more a more secure way of handling password and keys. 

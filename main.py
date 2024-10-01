@@ -5,12 +5,20 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.firefox.options import Options
 from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.firefox.service import Service as FirefoxService
+from dotenv import load_dotenv
 import pandas as pd
 import time
 import glob
 import os
 import shutil
 
+load_dotenv()
+
+wp_email = os.getenv('wp_email')
+wp_password = os.getenv('wp_password')
+
+rc_email = os.getenv('rc_email')
+rc_password = os.getenv('rc_password')
 
 # check if there are files in the project files, if True delete them
 def delete_old_els_files():
@@ -35,7 +43,7 @@ delete_old_rc_files()
 print('deleted old files')
 
 options = Options()
-options.add_argument('--headless')
+#options.add_argument('--headless')
 # firefox_driver_path = '/usr/local/bin/geckodriver'
 # driver_service = webdriver.FirefoxService(executable_path=firefox_driver_path)
 # els_driver = webdriver.Firefox(options=options, service=driver_service)
@@ -49,8 +57,8 @@ def download_els_export_file(driver):
     pass_element = driver.find_element(By.ID, "user_pass")
     auth_btn_element = driver.find_element(By.ID, "wp-submit")
 
-    email_element.send_keys("electronicshoparad@gmail.com")
-    pass_element.send_keys("6k2num2H!")
+    email_element.send_keys(wp_email)
+    pass_element.send_keys(wp_password)
     auth_btn_element.click()
     driver.implicitly_wait(5)
 
@@ -109,8 +117,8 @@ def download_rc_export_file(driver):
     driver.implicitly_wait(10)
     email_element = driver.find_element(By.ID, "user_login")
     pass_element = driver.find_element(By.ID, "user_pass")
-    email_element.send_keys("electronicshoparad@gmail.com")
-    pass_element.send_keys("FcxZHc^am!Yt!B%LnYcmtOhQ")
+    email_element.send_keys(rc_email)
+    pass_element.send_keys(rc_password)
     submit_btn = driver.find_element(By.ID, "wp-submit")
     submit_btn.click()
     driver.implicitly_wait(10)
